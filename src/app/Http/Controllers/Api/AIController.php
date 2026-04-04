@@ -5,19 +5,16 @@ namespace App\Http\Controllers\Api;
 use App\Ai\Agents\ChatAgent;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Laravel\Ai\Ai as LaravelAi;
-use Laravel\Ai\Facades\AI;
+use App\Services\OllamaService;
 
 class AIController extends Controller
 {
-    public function chat(Request $request, ChatAgent $agent)
+    public function chat(Request $request, OllamaService $ollama)
     {
-        $response = LaravelAi::agent(ChatAgent::class)
-            ->prompt($request->message)
-            ->send();
+        $result = $ollama->chat($request->message);
 
         return response()->json([
-            'message' => $response->text(),
+            'result' => $result
         ]);
     }
 }
